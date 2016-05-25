@@ -1,7 +1,7 @@
 vnc server
 ===================
 
-Demo project for the course Advanced JavaScript at FMI
+RFB wire protocol client and server
 
 Node 0.10.32 required.
 
