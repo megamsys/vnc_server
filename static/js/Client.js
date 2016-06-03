@@ -4,7 +4,7 @@
 
   var Config = {
       URL2: 'http://localhost:8090',
-      URL1: 'http://localhost:8090'
+      URL1: 'http://192.168.0.106:8090'
     };
   var keyMap = {
     8: [
@@ -371,7 +371,7 @@
       39,
       34
     ]
-  };  
+  };
 
 
   function Client(screen) {
@@ -426,7 +426,7 @@
         var canvas = self._screen.getCanvas();
         canvas.width = config.width;
         canvas.height = config.height;
-        self._scaleScreen(config);
+        //self._scaleScreen(config);
         self._initEventListeners();
         resolve();
         //clearTimeout(timeout);
