@@ -3,7 +3,8 @@
   'use strict';
 
   var Config = {
-      URL: 'http://localhost:8090'
+      URL2: 'http://localhost:8090',
+      URL1: 'http://localhost:8090'
     };
   var keyMap = {
     8: [
@@ -370,7 +371,8 @@
       39,
       34
     ]
-  };
+  };  
+
 
   function Client(screen) {
     this._screen = screen;
@@ -397,9 +399,15 @@
     });
   };
 
-  Client.prototype.connect = function (config) {
-    //this._socket = io.connect(Config.URL, { 'force new connection': true });
-    this._socket = io.connect("http://localhost:7777", { path: '/vnc' });
+  Client.prototype.connect1 = function () {
+    this._socket = io.connect(Config.URL1, { 'force new connection': true });
+  //  this._socket = io.connect("http://localhost:7777", { path: '/vnc' });
+    return this._addHandlers();
+  };
+
+  Client.prototype.connect2 = function (config) {
+    this._socket = io.connect(Config.URL2, { 'force new connection': true });
+  //  this._socket = io.connect("http://localhost:7777", { path: '/vnc' });
     this._socket.emit('init', {
       host: config.host,
       port: config.port,
@@ -411,9 +419,9 @@
   Client.prototype._addHandlers = function () {
     var self = this;
     return new Promise(function (resolve, reject) {
-      var timeout = setTimeout(function () {
-        reject();
-      }, 2000);
+      //var timeout = setTimeout(function () {
+      //  reject();
+      //}, 2000);
       self._socket.on('init', function (config) {
         var canvas = self._screen.getCanvas();
         canvas.width = config.width;
@@ -421,7 +429,7 @@
         self._scaleScreen(config);
         self._initEventListeners();
         resolve();
-        clearTimeout(timeout);
+        //clearTimeout(timeout);
       });
       self._socket.on('frame', function (frame) {
         self._screen.drawRect(frame);
@@ -445,7 +453,7 @@
     code = code.toString();
     var keys = keyMap[code];
     if (keys) {
-      return keys[shift ? 1 : 0];
+      return keys[shift ? 0 : 1];
     }
     return null;
   };

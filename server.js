@@ -2,7 +2,9 @@
 
 var RFB = require('rfb');
 var io = require('socket.io');
-var cio = require('socket.io-client');
+var path = require("path");
+var bodyParser = require('body-parser');
+//var cio = require('socket.io-client');
 var Png = require('./node_modules/png/build/Release/png').Png;
 //var Png = require('./node_modules/node-png/lib/png').Png;
 var express = require('express');
@@ -119,31 +121,27 @@ function disconnectClient(socket) {
   });
 }
 
-function connect(config) {
-  var csocket = cio.connect("ws://localhost:7777/vnc");
-  csocket.emit('init', {
-    host: config.host,
-    port: config.port,
-    password: config.password
+function socket1(server, host, port) {
+  io = io.listen(server, { log: false, 'transports':['xhr-polling','polling', 'websocket', 'flashsocket'], });
+  io.sockets.on('connection', function (socket) {
+    console.info('Client connected');
+    //connect(config);
+    var r = createRfbConnection({host: host, port: port, password: ""}, socket);
+    socket.on('mouse', function (evnt) {
+      r.sendPointer(evnt.x, evnt.y, evnt.button);
+    });
+    socket.on('keyboard', function (evnt) {
+      r.sendKey(evnt.keyCode, evnt.isDown);
+      console.info('Keyboard input');
+    });
+    socket.on('disconnect', function () {
+      disconnectClient(socket);
+      console.info('Client disconnected');
+    });
   });
 }
 
-(function () {
-  var app = express();
-  var server = http.createServer(app);
-
-  app.use(express.static(__dirname + '/static/'));
-  app.use(function(req, res, next) {
-        res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-        res.header("Access-Control-Allow-Headers", "Content-Type");
-        res.setHeader('Access-Control-Allow-Credentials', true);
-        next();
-    });
-  server.listen(Config.HTTP_PORT);
-
-  console.log('Listening on port', Config.HTTP_PORT);
-
+function socket2(server) {
   io = io.listen(server, { log: false, 'transports':['xhr-polling','polling', 'websocket', 'flashsocket'], });
   io.sockets.on('connection', function (socket) {
     console.info('Client connected');
@@ -151,7 +149,6 @@ function connect(config) {
     socket.on('init', function (config) {
       //connect(config);
       var r = createRfbConnection(config, socket);
-      console.info(config);
       socket.on('mouse', function (evnt) {
         r.sendPointer(evnt.x, evnt.y, evnt.button);
       });
@@ -165,4 +162,27 @@ function connect(config) {
       });
     });
   });
+}
+
+(function () {
+  var app = express();
+  var server = http.createServer(app);
+
+  app.use(express.static(__dirname + '/static/'));
+  app.use(bodyParser.urlencoded({ extended: true }));
+
+  app.get('/', function(req, res){
+    socket2(server);
+    response.sendfile(path.join(__dirname+'/static/index.html'));
+  });
+
+  app.post('/vnc', function(req, res){
+    socket1(server, req.body.host, req.body.port);
+    res.sendfile(path.join(__dirname+'/static/vnc.html'));
+  });
+
+  server.listen(Config.HTTP_PORT);
+
+  console.log('Listening on port', Config.HTTP_PORT);
+
 }());

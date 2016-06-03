@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>       
+    </head>
+    <body>   
+
+        <script>
+	    (function () {
+			var form = document.createElement("form");
+			document.body.appendChild(form);
+			form.method = "POST";
+			form.action = "http://localhost:8090/vnc";
+			form.target = "_blank";
+			var element1 = document.createElement("INPUT");         
+    			element1.name="host"
+    			element1.value = "136.243.49.217";
+       			element1.type = 'hidden'
+          		form.appendChild(element1);
+         		var element2 = document.createElement("INPUT");         
+       			element2.name="port"
+         		element2.value = 6411;
+         		element2.type = 'hidden'
+          		form.appendChild(element2);
+			form.submit();
+		
+	    }());
+	</script>
+    </body>
+</html>
+
