@@ -4,7 +4,7 @@
 
   var Config = {
       URL2: 'http://localhost:8090',
-      URL1: 'http://192.168.0.106:8090'
+      URL1: 'http://localhost:8090'
     };
   var keyMap = {
     8: [

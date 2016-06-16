@@ -1,17 +1,52 @@
 {
-  "name": "js-vnc",
-  "version": "0.0.1",
-  "repository": {
-    "type": "git",
-    "url": "http://github.com/mgechev/js-vnc"
-  },
-  "dependencies": {
-    "connect": "3.4.1",
-    "express": "4.13.4",
+	"name": "vnc_server",
+	"version": "0.0.1",
+	"description": "VNC client - RFB wire protocol client and server",
+	"homepage": "http://devcenter.megam.io",
+	"author": {
+		"name": "RajThilak",
+		"email": "rajthilak@megam.io"
+	},
+	"contributors": [
+		{
+			"name": "Kishorekumar Neelamegam",
+			"email": "nkishore@megam.io",
+			"url": "http://www.megam.io"
+		}
+	],
+
+	"bugs": {
+		"url": "https://github.com/megamsys/vnc_server/issues"
+	},
+	"license": {
+		"type": "APACHEV2",
+		"url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/megamsys/vnc_server.git"
+	},
+
+	"main": "./index.html",
+
+	"bin": {
+		"vnc": "vnc.js"
+	},
+	"dependencies": {
+		"socket.io": "1.4.6",
+		"mime": "~1.2.11",
+		"express": "4.13.4",
+		"util": "~0.10.3",
+		"js-yaml": "~3.0.2",
+		"yaml-config": "~0.3.0",
+		"log": "~1.4.0",
+		"uglify-js": "~2.4.14",
+		"forever-monitor":"~1.2.3",
+		"cluster":"~0.7.7",
     "rfb": "0.2.3",
     "png": "3.0.3",
-    "socket.io": "1.4.6",
     "body-parser": "1.15.1",
     "socket.io-client": "1.4.6"
-  }
+	},
+	"engine": "~0.10.0"
 }
