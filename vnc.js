@@ -52,8 +52,12 @@ console.log("VNC Server:" + yaml.version + " listening on port =" + yaml.config.
 */
 /* This take the typical use-case of serving files in ./public */
 //app.use(express.static(__dirname + '/public'));
+var express = require('express');
+var app = express();
+webServer = http.createServer(app);
+//webServer = http.createServer(vnc_tenant.http_request);
+app.use(express.static(__dirname + '/public'));
 
-webServer = http.createServer(vnc_tenant.http_request);
 webServer.listen(yaml.config.server.port, function() {
     wsServer = new WebSocketServer({server: webServer,
                                     handleProtocols: vnc_tenant.selectProtocol});
